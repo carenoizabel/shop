@@ -5,13 +5,16 @@ import styles from "../page.module.css";
 import Spinner from "../Spinner";
 
 export default function Main() {
-  const [listProduct, setProduct] = useState([]);
+  const [listProduct, setListProduct] = useState([]);
+  const [listComplete, setListComplete] = useState([]);
+  const [textSearch, setTextSearch] = useState('');
 
   useEffect(() => {
     const getProduct = async () => {
       const response = await fetch("https://fakestoreapi.com/products");
       const data = await response.json();
-      setProduct(data);
+      setListProduct(data);
+      setListComplete(data);
     };
     getProduct();
   }, []);
@@ -20,7 +23,7 @@ export default function Main() {
     const listAux = [...listProduct].sort((a, b) =>
       a.title.localeCompare(b.title)
     );
-    setProduct(listAux);
+    setListProduct(listAux);
   };
 
   const orderZa = () => {
@@ -29,22 +32,35 @@ export default function Main() {
     );
 
     listAux = listAux.reverse();
-    setProduct(listAux);
+    setListProduct(listAux);
   };
+
+  const search = (text) => {
+    setTextSearch(text);
+
+    if (text.trim() === '') {
+      setListProduct(listComplete);
+      return
+    }
+    const newList = listProduct.filter((product) =>
+      product.title.toUpperCase().trim().includes(textSearch.toUpperCase())
+    );
+    setListProduct(newList);
+  }
 
   const orderPMenor = () => {
     const listAuxPreco = [...listProduct].sort((a, b) => a.price - b.price);
-    setProduct(listAuxPreco);
+    setListProduct(listAuxPreco);
   };
 
   const orderPMaior = () => {
     let listAuxPreco = [...listProduct].sort((a, b) => a.price - b.price);
 
     listAuxPreco = listAuxPreco.reverse();
-    setProduct(listAuxPreco);
+    setListProduct(listAuxPreco);
   };
 
-  if ( listProduct[0] == null) {
+  if ( listComplete[0] == null) {
     return <Spinner />;
   }
 
@@ -53,6 +69,7 @@ export default function Main() {
       <main className={styles.main}>
         <h1 className={styles.titulo}>Produtos em destaque</h1>
         <div className={styles.filters}>
+          <input type="text" value={textSearch} placeholder="Pesquise um produto" onChange={(event) => search(event.target.value)}/>
           <button onClick={orderAz}>Az</button>
           <button onClick={orderZa}>Za</button>
           <button onClick={orderPMenor}>Preço Menor</button>

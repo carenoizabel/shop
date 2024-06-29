@@ -107,4 +107,12 @@ body{
     display: flex;
     justify-content: center;
     align-items: center;
+    min-height: 100vh;
+  }
+  
+  .page_html__vl3x3{
+    margin: 0;
+  }
+  .page_body__pK_rb{
+    margin: 0;
   }
