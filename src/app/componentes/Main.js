@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import Link from 'next/link';
 import Image from "next/image";
 import styles from "../page.module.css";
 import Spinner from "../Spinner";
@@ -99,6 +100,9 @@ export default function Main() {
               <p className={styles.descricaop}>{product.description}</p>
               <p className={styles.categoriap}>{product.category}</p>
               <p className={styles.countp}>{product.count}</p>
+              <Link href={"/product/" + product.id}>
+                  <button>Ver Mais</button>
+              </Link>
             </div>
           ))}
         </div>
